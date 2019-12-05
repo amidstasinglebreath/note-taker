@@ -1,0 +1,24 @@
+{
+  "name": "note-taker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amidstasinglebreath/note-taker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mysql": "^2.16.0",
+    "util": "^0.12.1"
+  },
+  "bugs": {
+    "url": "https://github.com/amidstasinglebreath/note-taker/issues"
+  },
+  "homepage": "https://github.com/amidstasinglebreath/note-taker#readme"
+}
