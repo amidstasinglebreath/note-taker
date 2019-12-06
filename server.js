@@ -53,6 +53,7 @@ app.post("/api/notes", function (req, res) {
             } else {  
                 noteList.push(newNote);
             }
+            //overwrites old db file
             writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(notesList))
                 .then(function () {
                     console.log("-A new note was writed to db.json");
