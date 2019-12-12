@@ -31,6 +31,12 @@ var dbNoteDelete = function (id) {
     })
 }
 
+var getNotelist = function () {
+    return getNotes().then(function (data) {
+      displayNoteList(data);
+    });
+  };
+
 var displayNoteList = function (notes) {
     $noteList.empty();
 
@@ -48,20 +54,84 @@ var displayNoteList = function (notes) {
     }
 };
 
+var displayActiveNote = function() {
+    $saveNoteBtn.hide();
+    if (currentNote.id || currentNote.id===0) { 
+      $editNoteBtn.show();
+      $noteTitle.attr("readonly", true);
+      $noteText.attr("readonly", true);
+      $noteTitle.val(currentNote.title);
+      $noteText.val(currentNote.text);
+    } else {
+      $noteTitle.attr("readonly", false);
+      $noteText.attr("readonly", false);
+      $noteTitle.val("");
+      $noteText.val("");
+    }
+};
 
-//todo
-/* Processes
-    display data from API
- */
+var editNote = function(){
+    $editNoteBtn.hide();
+    $saveNoteBtn.show();
+    $noteTitle.attr("readonly", false);
+    $noteText.attr("readonly", false);
+};
 
-/* Tools
-    toggleing visibility?
-    display curent note
-        edit that note
-
-    show button
-    show new not view
+var saveNote = function(){
+    if (currentNote.id || currentNote.id===0) { //updating current note
+        currentNote.title = $noteTitle.val();
+        currentNote.text = $noteText.val();
+        saveNotestoDB(currentNote).then(function(data){
+          currentNote={};
+          getNotelist();
+          displayActiveNote();
+        }); 
+      } else {   //create a new note object
+        var newNote = {
+          title: $noteTitle.val(),
+          text: $noteText.val()
+        };
     
+        saveNotestoDB(newNote).then(function (data) {
+          getNotelist();
+          displayActiveNote();
+        });
+      }
+};
 
-    master/main function?
- */
+var pageNoteDelete = function(){
+    event.stopPropagation();
+
+    var note = $(this)
+      .parent(".list-group-item")
+      .data();
+  
+    if (currentNote.id === note.id) {
+      currentNote = {};
+    }
+  
+    deleteNote(note.id).then(function () {
+      getNotelist();
+      displayActiveNote();
+    });
+};
+
+var selectListNote = function(){
+    currentNote = $(this).data();
+    displayActiveNote();
+};
+
+var createNewNote = function(){
+    $editNoteBtn.hide();
+    currentNote = {};
+    displayActiveNote();
+};
+
+$saveNoteBtn.on("click", saveNote());
+$editNoteBtn.on("click", editNote());
+$noteList.on("click", ".list-group-item", selectListNote());
+$newNoteBtn.on("click", createNewNote());
+$noteList.on("click", ".delete-note", pageNoteDelete());
+
+//functionally the master/main function
+getNotelist();
