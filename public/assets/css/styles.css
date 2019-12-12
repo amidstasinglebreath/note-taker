@@ -4,7 +4,8 @@ html, body {
     padding: 0;
   }
   
-  .save-note {
+  .save-note,
+  .edit-note {
     display: none;
   }
   

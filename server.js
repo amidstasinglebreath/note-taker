@@ -42,19 +42,19 @@ app.get("/api/notes", function (req, res) {
 
 //Post
 app.post("/api/notes", function (req, res) {
-    let newNote = req.body;
+    var newNote = req.body;
     readFileAsync(path.join(__dirname, "./db/db.json"), "utf8")
         .then(function (data) {
             notesList = JSON.parse(data);
             if (newNote.id || newNote.id===0) {   
-                let curNote = notesList[newNote.id];
+                let curNote = noteList[newNote.id];
                 curNote.title = newNote.title;
                 curNote.text = newNote.text;
             } else {  
                 noteList.push(newNote);
             }
             //overwrites old db file
-            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(notesList))
+            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(noteList))
                 .then(function () {
                     console.log("-A new note was writed to db.json");
                 })
@@ -69,7 +69,7 @@ app.delete("/api/notes/:id", function (req, res) {
         .then(function (data) {
             noteList = JSON.parse(data);
             noteList.splice(id, 1);
-            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(notesList))
+            writefileAsync(path.join(__dirname, "./db/db.json"), JSON.stringify(noteList))
                 .then(function () {
                     console.log("-Note was deleted from db.json");
                 })
